@@ -70,6 +70,9 @@ vignette (or at least to a list of available criteria)
 \section{Problem description}{
 
 Here comes a description of the \code{probpars} structure.
+Reminder: the objective function routine must receive a matrix of row vectors
+to be evaluated in the form of an input parameter named either "x" or "X" or
+"Pop" (any one of the three is allowed).
 }
 
 \section{Random Seed}{
@@ -81,7 +84,7 @@ to NULL, in which case the seed is arbitrarily set using
 }
 \examples{
 # DE/rand/1/bin with population 40, F = 0.8 and CR = 0.5
-popsize  <- 40
+popsize  <- 100
 mutpars  <- list(name = "mutation_rand", f = 0.8)
 recpars  <- list(name = "recombination_bin", cr = 0.5, minchange = TRUE)
 selpars  <- list(name = "selection_standard")

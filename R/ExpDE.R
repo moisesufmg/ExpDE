@@ -22,6 +22,9 @@
 #'
 #' @section Problem description:
 #' Here comes a description of the \code{probpars} structure.
+#' Reminder: the objective function routine must receive a matrix of row vectors 
+#' to be evaluated in the form of an input parameter named either "x" or "X" or 
+#' "Pop" (any one of the three is allowed).
 #' 
 #' @section Random Seed:
 #' The \code{seed} argument receives the desired seed for the PRNG. This value 
@@ -53,7 +56,7 @@
 #' @examples
 #' # DE/rand/1/bin with population 40, F = 0.8 and CR = 0.5
 #' popsize  <- 100
-#' mutpars  <- list(name = "mutation_best", f = 0.8)
+#' mutpars  <- list(name = "mutation_rand", f = 0.8)
 #' recpars  <- list(name = "recombination_bin", cr = 0.5, minchange = TRUE)
 #' selpars  <- list(name = "selection_standard")
 #' stopcrit <- list(names = "stop_maxiter", maxiter = 100)
