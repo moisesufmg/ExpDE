@@ -2,8 +2,6 @@
 #' 
 #' Implements different stop criteria for the ExpDE framework
 #' 
-#' The details (if any) come here...
-#' 
 #' @section Warning:
 #' This routine accesses the parent environment used in the main function 
 #' \code{ExpDE()}, which means that changes made in the variables 
@@ -12,19 +10,19 @@
 #' 
 #' @return logical flag indicating whether any stop condition has been reached.
 #' @export
+#' 
 check_stop_criteria <- function(){
   
   env   <- parent.frame()
   
   # ========== Error catching and default value definitions
-  stopifnot(any("stopcrit" == names(env)),
-            any("names" == names(env$stopcrit)))
-  
+  assertthat::assert_that("stopcrit" %in% names(env),
+                          "names" %in% names(env$stopcrit))
+
   crits <- env$stopcrit$names
   
-  stopifnot(!any("stop_maxiter" == crits) || any("maxiter" == names(env$stopcrit)),
-            !any("stop_maxeval" == crits) || any("maxevals" == names(env$stopcrit)))
-  
+  assertthat::assert_that(("stop_maxiter" %in% crits && "maxiter" %in% names(env$stopcrit)) ||
+                          ("stop_maxeval" %in% crits && "maxevals" %in% names(env$stopcrit)))
   # ==========
   
   keep.running <- TRUE

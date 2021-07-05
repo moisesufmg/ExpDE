@@ -18,12 +18,13 @@
 recombination_arith <- function(X, M, ...) {
   
   # ========== Error catching and default value definitions
-  if (!identical(dim(X), dim(M))) {
-    stop("recombination_arith() requires dim(X) == dim(M)")
-  }
+  assertthat::assert_that(is.matrix(X), is.numeric(X),
+                          is.matrix(M), is.numeric(M),
+                          assertthat::are_equal(dim(X), dim(M)))
+  
   # ==========
   
-  lambda <- matrix(rep(runif(nrow(X)),
+  lambda <- matrix(rep(stats::runif(nrow(X)),
                        ncol(X)),
                    ncol = ncol(X),
                    byrow = FALSE)

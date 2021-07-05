@@ -29,14 +29,11 @@ recombination_lbga <- function(X, M, ...) {
   # Get access to variables in the calling environment
   env <- parent.frame()
   
-  if (!identical(dim(X), dim(M))) {
-    stop("recombination_lbga() requires dim(X) == dim(M)")
-  }
-  if (!all(c("J", "probpars", "nfe") %in% names(env))){
-    stop("recombination_lbga() requires calling environment to contain 
-         variables J, nfe and probpars")
-  }
-  
+  assertthat::assert_that(is.matrix(X), is.numeric(X),
+                          is.matrix(M), is.numeric(M),
+                          assertthat::are_equal(dim(X), dim(M)),
+                          all(assertthat::has_name(env, 
+                                                   c("J", "probpars", "nfe"))))
   # ==========
   
   # Performance values of the current population (X)
@@ -64,10 +61,10 @@ recombination_lbga <- function(X, M, ...) {
   eps <- 1e-15
   Lambda <- (C2 - C1) / matrix(rep(sqrt(rowSums((C1 - C2) ^ 2))+ eps, ncol(X)),
                                ncol = ncol(X),
-                               byrow = FALSE) 
+                               byrow = FALSE)
   
   
-  mr <- matrix(runif(nrow(X) * 16), 
+  mr <- matrix(stats::runif(nrow(X) * 16), 
                ncol = 16) <= 1 / 16
   
   ms <- matrix(rep((2^-(0:15)), 

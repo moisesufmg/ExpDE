@@ -28,15 +28,11 @@
 recombination_exp <- function(X, M, recpars) {
   
   # ========== Error catching and default value definitions
-  if (!identical(dim(X), dim(M))) {
-    stop("recombination_exp() requires dim(X) == dim(M)")
-  }
-  if (!("cr" %in% names(recpars))){
-    stop("recombination_exp() requires field cr in recpars")
-  }
-  if (!(0 < recpars$cr & recpars$cr <= 1)) {
-    stop("recombination_exp() requires numeric 0 < recpars$cr <= 1")
-  }
+  assertthat::assert_that(is.matrix(X), is.numeric(X),
+                          is.matrix(M), is.numeric(M),
+                          assertthat::are_equal(dim(X), dim(M)),
+                          assertthat::has_name(recpars, "cr"),
+                          is_within(recpars$cr, 0, 1))
   # ==========
   
   # Start points for mutation: for each row, a value between 1 and length(x),
@@ -47,10 +43,11 @@ recombination_exp <- function(X, M, recpars) {
   
   # End points for mutation: for each row, a value between mut.start and 
   # (mut.start + length(x) - 1), exponentially distributed
+  probs <- recpars$cr^(1:ncol(X) - 1) - recpars$cr^(1:ncol(X))
   mut.end    <- mut.start + sample(x    = 1:ncol(X) - 1,
                                    size = nrow(X),
                                    replace = TRUE,
-                                   prob = recpars$cr^(1:ncol(X)))
+                                   prob = probs / sum(probs))
   
   # Helper function for setting mutation indices: 
   # for each row wrap around the end of the vector, 

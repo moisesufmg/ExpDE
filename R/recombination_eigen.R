@@ -31,21 +31,15 @@
 recombination_eigen <- function(X, M, recpars) {
 
   # ========== Error catching and default value definitions
-  if (!("othername" %in% names(recpars))){
-    stop("recombination_eigen() requires a base recombination operator defined 
-         in recpars$othername")
-  }
-  if (recpars$othername == "recombination_eigen"){
-    stop("base recombination operator must be different from /eigen in 
-         recombination_eigen()")
-  }
-  if (!identical(dim(X),dim(M))) {
-    stop("recombination_eigen() requires dim(X) == dim(M)")
-  }
+  assertthat::assert_that(is.matrix(X), is.numeric(X),
+                          is.matrix(M), is.numeric(M),
+                          assertthat::are_equal(dim(X), dim(M)),
+                          assertthat::has_name(recpars, "othername"),
+                          recpars$othername != "recombination_eigen")
   # ==========
   
   # Calculate eigenvectors of the covariance matrix of X
-  Q <- eigen(cov(X))$vectors
+  Q <- eigen(stats::cov(X))$vectors
 
   # Project vectors in X and M onto basis Q
   Xq <- t(sapply(1:(2*nrow(X)), 

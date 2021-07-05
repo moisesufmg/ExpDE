@@ -1,8 +1,6 @@
 #' Create population
 #' 
-#' Create new population for the ExpDE framework
-#' 
-#' The detailed description comes here...
+#' Creates a new population for the ExpDE framework
 #' 
 #' @param popsize population size
 #' @param probpars list of named problem parameters (see \code{\link{ExpDE}}).
@@ -15,14 +13,17 @@ create_population <- function(popsize,      # population size
                               probpars)     # list of named problem parameters
 {
   #Generate population of individuals within the standardized space x \in (0,1)
+ 
   
-  # Include error catching:
-  # - probpars must have fields "xmin" e "xmax"
-  # - popsize must be equal or greater than 3
-  
+  # ========== Error catching and default value definitions
+  assertthat::assert_that(assertthat::is.count(popsize),
+                          is.list(probpars),
+                          "xmax" %in% names(probpars))
+  # ==========
+   
   # get problem dimension
   prob.dim <- length(probpars$xmax)
   
-  return (matrix(runif(n = popsize * prob.dim), 
+  return (matrix(stats::runif(n = popsize * prob.dim), 
                  nrow = popsize))
 }

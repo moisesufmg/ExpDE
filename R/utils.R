@@ -1,7 +1,7 @@
 # Generate an matrix of uniformly distributed values in the interval (0,1) with
 # the same dimension as M
 randM <- function(M) {
-  matrix(runif(prod(dim(M))), 
+  matrix(stats::runif(prod(dim(M))), 
          ncol = ncol(M))
 }
 
@@ -15,4 +15,16 @@ denormalize_population <- function(probpars, Pop){
                ncol = ncol(Pop),
                byrow = TRUE)
   return(LL + Pop*(UL-LL))
+}
+
+# Check if a numeric value is within certain bounds
+is_within <- function(x, xmin = 0, xmax = 1, strict = FALSE){
+  out <- is.numeric(x) &&
+    ifelse(strict,
+           x >  xmin,
+           x >= xmin) &&
+  ifelse(strict,
+         x <  xmax,
+         x <= xmax)
+  return(out)
 }
